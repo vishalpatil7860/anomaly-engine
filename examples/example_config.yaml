@@ -1,0 +1,46 @@
+database:
+  url: "sqlite:///data/anomaly.db"
+
+storage:
+  path: "~/.anomalyd/history.db"
+
+llm:
+  enabled: false
+  model: "llama3"
+  base_url: "http://localhost:11434"
+
+tables:
+  - name: orders
+    detection:
+      univariate:
+        enabled: true
+        method: zscore
+        threshold: 3.0
+        columns: [amount]
+      categorical:
+        enabled: true
+        columns: [status, category]
+
+  - name: customers
+    detection:
+      univariate:
+        enabled: true
+        method: iqr
+        threshold: 1.5
+        columns: [age, total_spent]
+
+  - name: products
+    detection:
+      univariate:
+        enabled: true
+        method: mad
+        threshold: 3.5
+        columns: [price, stock]
+
+  - name: order_items
+    detection:
+      univariate:
+        enabled: true
+        method: zscore
+        threshold: 3.0
+        columns: [quantity, price]
